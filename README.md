@@ -38,7 +38,7 @@ A modern, full-stack note-taking application built with FastAPI and React. This 
 
 ```bash
 git clone https://github.com/siddheshb100/Notes-Plus-Plus.git
-cd NotesPlusPlus
+cd Notes-Plus-Plus
 ```
 
 ### Backend Setup
