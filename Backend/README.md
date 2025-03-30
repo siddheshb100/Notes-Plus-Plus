@@ -1,33 +1,64 @@
 # Notes++ Backend
 
-The backend service for Notes++, a modern note-taking application. Built with FastAPI and SQLModel.
+FastAPI-powered backend service for Notes++, featuring SQLModel ORM integration and SQLite database.
 
 ## Features
 
-- RESTful API endpoints for CRUD operations on notes
-- SQLite database with SQLModel ORM
-- CORS middleware for frontend communication
+- RESTful API with FastAPI framework
+- SQLModel ORM for database operations
 - Automatic API documentation with Swagger UI
+- SQLite database with automatic migrations
+- CORS middleware for frontend integration
+- Real-time timestamp handling
 - Input validation with Pydantic models
+- Comprehensive error handling
+- Hot-reload development server
 
 ## Tech Stack
 
-- FastAPI - Modern web framework for building APIs
-- SQLModel - SQL database library for Python, based on SQLAlchemy and Pydantic
-- SQLite - Lightweight database for data persistence
-- Uvicorn - ASGI server for running FastAPI applications
+- FastAPI: ^0.115.12
+- SQLModel: ^0.0.24
+- Python: ≥3.8
+- Uvicorn: ^0.34.0
+- SQLite3
 
-## Prerequisites
+## API Endpoints
 
-- Python 3.8 or higher
-- pip (Python package manager)
+### Notes
+- `GET /notes/` - Retrieve all notes
+  - Response: `List[Note]`
 
-## Installation
+- `POST /notes/` - Create new note
+  - Request Body: `Note` (title, content)
+  - Response: Created `Note`
 
-1. Create and activate a virtual environment:
+- `PUT /notes/{note_id}` - Update note
+  - Request Body: `Note` (title, content)
+  - Response: Updated `Note`
+
+- `DELETE /notes/{note_id}` - Delete note
+  - Response: Success message
+
+### Root
+- `GET /` - Welcome endpoint
+  - Response: Welcome message
+
+## Data Model
+
+```python
+class Note(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str
+    content: str
+    created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
+```
+
+## Development Setup
+
+1. Create virtual environment:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python -m venv venv        # Or python3 -m venv venv
+   source venv/bin/activate   # On Windows: venv\Scripts\activate
    ```
 
 2. Install dependencies:
@@ -35,105 +66,52 @@ The backend service for Notes++, a modern note-taking application. Built with Fa
    pip install -r requirements.txt
    ```
 
-3. Start the server:
+3. Environment Setup:
+   - No additional environment variables required
+   - Database is automatically created on first run
+   - CORS is pre-configured for frontend access
+
+4. Start development server:
    ```bash
    uvicorn main:app --reload
    ```
 
-The server will start at `http://localhost:8000`
-
 ## API Documentation
 
-Once the server is running, you can access:
-- Interactive API documentation (Swagger UI): `http://localhost:8000/docs`
-- Alternative API documentation (ReDoc): `http://localhost:8000/redoc`
-
-## API Endpoints
-
-### Notes
-
-- `GET /notes/`
-  - Get all notes
-  - Returns: List of notes
-
-- `POST /notes/`
-  - Create a new note
-  - Request body:
-    ```json
-    {
-      "title": "string",
-      "content": "string"
-    }
-    ```
-  - Returns: Created note
-
-- `PUT /notes/{note_id}`
-  - Update an existing note
-  - Request body:
-    ```json
-    {
-      "title": "string",
-      "content": "string"
-    }
-    ```
-  - Returns: Updated note
-
-- `DELETE /notes/{note_id}`
-  - Delete a note
-  - Returns: Success message
-
-### Root
-
-- `GET /`
-  - Welcome message
-  - Returns: `{"message": "Welcome to Notes!"}`
-
-## Database
-
-The application uses SQLite as its database, with the database file located at `notes.db`. The database schema is automatically created when the application starts.
-
-## CORS Configuration
-
-The backend includes CORS middleware configured to allow requests from the frontend:
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-```
-
-## Dependencies
-
-Key dependencies include:
-- `fastapi`: ^0.115.12
-- `sqlmodel`: ^0.0.24
-- `uvicorn`: ^0.34.0
-- `pydantic`: ^2.11.1
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
 
 ## Error Handling
 
-The API implements comprehensive error handling:
-- 404 Not Found for missing resources
-- 400 Bad Request for invalid input
-- 500 Internal Server Error with detailed error messages
-- Custom error responses for specific scenarios
+- 404: Resource not found
+- 400: Bad request / Invalid input
+- 500: Internal server error
 
-## Security
+## Security Features
 
-- Input validation using Pydantic models
-- CORS configuration for secure frontend communication
-- SQL injection prevention through SQLModel
-- Request rate limiting (TODO)
+- Input validation via Pydantic
+- CORS configuration
+- SQL injection prevention
+- Database connection management
 
-## Development
+## Database
 
-- The application uses hot-reload for development
-- Database changes are automatically reflected
-- API documentation is automatically generated from the code
-- Proper error logging and handling
-- Type hints for better code quality
-- Database migrations support
-- Environment variable configuration support
+- SQLite database (`notes.db`)
+- Automatic table creation
+- Transaction support
+- Connection pooling
+
+## Database Management
+
+- Location: `./notes.db`
+- Auto-creation: Tables are created automatically on startup
+- Migrations: Handled automatically by SQLModel
+- Backup: Recommended to periodically backup the database file
+- Development: SQLite Browser recommended for direct DB access
+
+## Performance Considerations
+
+- Connection pooling enabled
+- Automatic index creation
+- Efficient query optimization
+- Transaction management for data integrity

@@ -4,12 +4,21 @@ The frontend service for Notes++, a modern note-taking application. Built with R
 
 ## Features
 
-- Modern and responsive UI
-- Real-time note management
-- Dark theme with custom color palette
+- Modern and responsive UI with Glassmorphism design
+- Real-time note management with optimistic updates
+- Custom dark theme with gradient animations
+- Dynamic clock component with real-time updates
+- Advanced hover animations and transitions
+- Form validation and error handling
+- Automatic scrolling behaviors
+- Mobile-first responsive design
 - Optimized performance with Vite
 - Type-safe development with ESLint
-- Beautiful animations and transitions
+- Custom button components with animations
+- Smart form state management
+- Real-time timestamp formatting
+- Comprehensive error handling
+- Cross-browser compatibility
 
 ## Tech Stack
 
@@ -18,6 +27,7 @@ The frontend service for Notes++, a modern note-taking application. Built with R
 - Tailwind CSS - Utility-first CSS framework
 - Axios - HTTP client for API communication
 - ESLint - Code linting and formatting
+- Cascadia Code - Monospace font for better code display
 
 ## Prerequisites
 
@@ -30,8 +40,12 @@ The frontend service for Notes++, a modern note-taking application. Built with R
    ```bash
    npm install
    ```
+3. Environment Setup:
+   - No additional environment variables required
+   - Database is automatically created on first run
+   - CORS is pre-configured for frontend access
 
-2. Start the development server:
+4. Start development server:
    ```bash
    npm run dev
    ```
@@ -60,8 +74,12 @@ frontend/
 │   ├── main.jsx     # Application entry point
 │   └── index.css    # Global styles
 ├── public/          # Static assets
-├── dist/           # Production build output
-└── config files    # Various configuration files
+├── dist/            # Production build output
+└── config/          # Configuration files
+    ├── eslint.config.js
+    ├── postcss.config.js
+    ├── tailwind.config.js
+    └── vite.config.js
 ```
 
 ## Available Scripts
@@ -88,20 +106,34 @@ const API_URL = "http://127.0.0.1:8000/notes/";
 
 ## Styling
 
-The application uses Tailwind CSS with a custom dark theme:
+The application uses Tailwind CSS with a custom dark theme and advanced design features:
 
 ```javascript
 colors: {
   dark: {
-    background: '#0D1117',  // GitHub Dark Background
-    card: '#161B22',       // Card Background
-    text: '#C9D1D9',       // Light Gray Text
-    accent: '#58A6FF',     // Soft Blue Accent
-    border: '#30363D',     // Border Color
-    button: '#238636',     // Green Button
+    gradient1: '#0F172A',  // Deep blue
+    gradient2: '#1E1B4B',  // Indigo
+    gradient3: '#4C1D95',  // Purple
+    background: '#0D1117', // GitHub Dark Background
+    card: '#161B22',      // Card Background
+    text: '#C9D1D9',      // Light Gray Text
+    accent: '#58A6FF',    // Soft Blue Accent
+    border: '#30363D',    // Border Color
   }
 }
+animations: {
+  gradient: 'gradient 5s ease infinite',
+  'fade-in': 'fadeIn 0.5s ease-out'
+}
 ```
+
+## Components
+
+- Clock - Real-time clock display with custom styling
+- Note Card - Glassmorphic card with advanced hover effects and transitions
+- Note Form - Dynamic form with validation and error handling
+- Custom Buttons - Animated buttons with hover effects
+- Error Boundary - Graceful error handling component
 
 ## Development
 
@@ -154,3 +186,19 @@ Key dependencies include:
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
+
+
+## Database Management
+
+- Location: `./notes.db`
+- Auto-creation: Tables are created automatically on startup
+- Migrations: Handled automatically by SQLModel
+- Backup: Recommended to periodically backup the database file
+- Development: SQLite Browser recommended for direct DB access
+
+## Performance Considerations
+
+- Connection pooling enabled
+- Automatic index creation
+- Efficient query optimization
+- Transaction management for data integrity
