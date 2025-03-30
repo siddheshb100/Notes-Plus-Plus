@@ -66,4 +66,4 @@ def delete_note(note_id: int, session: Session = Depends(get_session)):
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to Notes!"}
+    return {"message": "Welcome to Notes++!"}
