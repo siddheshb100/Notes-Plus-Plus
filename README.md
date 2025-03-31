@@ -8,8 +8,18 @@ A modern, full-stack note-taking application built with FastAPI and React. This 
 - Modern and responsive UI built with React and Tailwind CSS
 - RESTful API backend with FastAPI
 - SQLite database for data persistence
-- Real-time updates
+- Real-time updates and timestamp tracking
 - Cross-origin resource sharing enabled
+- Dynamic clock component showing current time
+- Beautiful gradient backgrounds with smooth animations
+- Glassmorphism design elements with backdrop blur
+- Responsive card layout with advanced hover effects
+- Smart form handling with validation
+- Automatic scrolling to edit form when editing notes
+- Custom monospace font (Cascadia Code) integration
+- Mobile-optimized responsive design
+- Error boundary implementation
+- Comprehensive API documentation
 
 ## Tech Stack
 
@@ -20,10 +30,12 @@ A modern, full-stack note-taking application built with FastAPI and React. This 
 - Uvicorn (ASGI server)
 
 ### Frontend
-- React 19
-- Vite (Build tool)
-- Tailwind CSS (Styling)
-- Axios (HTTP client)
+- React 19 with Fast Refresh
+- Vite (Next-generation build tool)
+- Tailwind CSS with custom theme
+- Axios for API communication
+- ESLint with React plugin support
+- PostCSS with autoprefixer
 
 ## Prerequisites
 
@@ -41,6 +53,10 @@ git clone https://github.com/siddheshb100/Notes-Plus-Plus.git
 cd Notes-Plus-Plus
 ```
 
+For detailed setup instructions:
+- [Backend Setup Guide](./Backend/README.md)
+- [Frontend Setup Guide](./Frontend/README.md)
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -50,13 +66,13 @@ cd Notes-Plus-Plus
 
 2. Create and activate a virtual environment:
    ```bash
-   python -m venv venv   # Or python3 -m venv venv
+   python -m venv venv  # Or python3 -m venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. Install dependencies:
    ```bash
-   pip install -r requirements.txt # Or if fails use: pip install --break-system-packages -r requirements.txt
+   pip install -r requirements.txt  # Or if fails use: pip install --break-system-packages -r requirements.txt
    ```
 
 4. Start the backend server:
@@ -99,14 +115,20 @@ The frontend development server will start at `http://localhost:5173`
 ```
 NotesPlusPlus/
 ├── Backend/
-│   ├── main.py           # FastAPI application
-│   ├── requirements.txt  # Python dependencies
-│   └── notes.db          # SQLite database
-└── frontend/
-    ├── src/             # React source code
-    ├── public/          # Static assets
-    ├── package.json     # Node.js dependencies
-    └── vite.config.js   # Vite configuration
+│   ├── main.py            # FastAPI application
+│   ├── requirements.txt   # Python dependencies
+│   └── notes.db           # SQLite database
+└── Frontend/
+    ├── src/               # React source code
+    │   ├── components/    # React components
+    │   │   └── Clock.jsx  # Clock component
+    │   ├── App.jsx        # Main application component
+    │   └── index.css      # Global styles
+    ├── public/            # Static assets
+    ├── package.json       # Node.js dependencies
+    ├── tailwind.config.js # Tailwind configuration
+    ├── postcss.config.js  # PostCSS configuration
+    └── vite.config.js     # Vite configuration
 ```
 
 ## Version Information
