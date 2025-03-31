@@ -1,7 +1,9 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlmodel import SQLModel, Session, create_engine, select, Field
-from typing import List
+from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+import os
 
 DATABASE_URL = 'sqlite:///./notes.db'
 engine = create_engine(DATABASE_URL, connect_args={'check_same_thread': False})
@@ -17,12 +19,14 @@ app.add_middleware(
 )
 
 class Note(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     title: str
     content: str
+    created_at: str = Field(default_factory=lambda: datetime.now().isoformat())
 
 @app.on_event("startup")
 def create_db():
+    # Only create tables if they don't exist
     SQLModel.metadata.create_all(engine)
 
 def get_session():
@@ -36,10 +40,15 @@ def get_notes(session: Session = Depends(get_session)):
 
 @app.post("/notes/", response_model=Note)
 def create_note(note: Note, session: Session = Depends(get_session)):
-    session.add(note)
+    db_note = Note(
+        title=note.title,
+        content=note.content,
+        created_at=datetime.now().isoformat()
+    )
+    session.add(db_note)
     session.commit()
-    session.refresh(note)
-    return note
+    session.refresh(db_note)
+    return db_note
 
 @app.put("/notes/{note_id}", response_model=Note)
 def update_note(note_id: int, updated_note: Note, session: Session = Depends(get_session)):
@@ -49,6 +58,7 @@ def update_note(note_id: int, updated_note: Note, session: Session = Depends(get
 
     note.title = updated_note.title
     note.content = updated_note.content
+    note.created_at = datetime.now().isoformat()  # Update timestamp on edit
 
     session.add(note)
     session.commit()
