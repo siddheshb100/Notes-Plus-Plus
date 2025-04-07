@@ -35,8 +35,23 @@ def get_session():
 
 @app.get("/notes/", response_model=List[Note])
 def get_notes(session: Session = Depends(get_session)):
-    notes = session.exec(select(Note)).all()
+    notes = session.exec(select(Note).order_by(Note.created_at.desc())).all()
     return notes
+
+@app.get("/notes/search/")
+def search_notes(query: str, session: Session = Depends(get_session)):
+    if not query:
+        return []
+    
+    # Use LIKE for case-insensitive search in both title and content
+    search_term = f"%{query}%"
+    statement = select(Note).where(
+        (Note.title.like(search_term)) | 
+        (Note.content.like(search_term))
+    ).order_by(Note.created_at.desc())
+    
+    results = session.exec(statement).all()
+    return results
 
 @app.post("/notes/", response_model=Note)
 def create_note(note: Note, session: Session = Depends(get_session)):

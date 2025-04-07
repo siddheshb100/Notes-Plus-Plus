@@ -9,6 +9,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [editingNoteId, setEditingNoteId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     axios.get(API_URL)
@@ -25,21 +26,26 @@ function App() {
 
   const addNote = async () => {
     if (!title || !content) return alert("Title & Content required!");
-
+  
     try {
       const noteData = {
         title,
         content,
         created_at: new Date().toISOString()
       };
-
+  
       if (editingNoteId) {
         const response = await axios.put(`${API_URL}${editingNoteId}`, noteData);
-        setNotes(notes.map((note) => note.id === editingNoteId ? response.data : note));
+        // For edited notes, we need to remove the old one and add the updated one at the beginning
+        setNotes([
+          response.data,
+          ...notes.filter((note) => note.id !== editingNoteId)
+        ]);
         setEditingNoteId(null);
       } else {
         const response = await axios.post(API_URL, noteData);
-        setNotes([...notes, response.data]);
+        // Place new note at the beginning of the array
+        setNotes([response.data, ...notes]);
       }
       setTitle("");
       setContent("");
@@ -57,6 +63,25 @@ function App() {
     }
   };
 
+  const searchNotes = async () => {
+    try {
+      const response = await axios.get(`${API_URL}search/?query=${encodeURIComponent(searchQuery)}`);
+      setNotes(response.data);
+    } catch (error) {
+      console.error("Error searching notes:", error);
+    }
+  };
+
+  const clearSearch = async () => {
+    setSearchQuery("");
+    try {
+      const response = await axios.get(API_URL);
+      setNotes(response.data);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-gradient1 via-dark-gradient2 to-dark-gradient3 text-dark-text p-6 font-mono">
       <Clock />
@@ -69,6 +94,32 @@ function App() {
           <h1 className="text-5xl font-extrabold text-white">
             Notes++
           </h1>
+        </div>
+
+        {/* Search Bar */}
+        <div className="w-full max-w-2xl mx-auto mb-8 bg-dark-card/90 backdrop-blur-lg p-5 rounded-xl shadow-xl border border-dark-border/30 flex gap-2">
+          <input
+            className="flex-grow p-3 bg-dark-background/70 border border-dark-border/50 text-dark-text rounded-lg outline-none focus:ring-2 focus:ring-dark-accent/50 transition-all duration-300 text-lg font-mono"
+            type="text"
+            placeholder="🔍 Search notes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && searchNotes()}
+          />
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
+            onClick={searchNotes}
+          >
+            🔍
+          </button>
+          {searchQuery && (
+            <button
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
+              onClick={clearSearch}
+            >
+              ✖️
+            </button>
+          )}
         </div>
 
         <div className="w-full max-w-2xl mx-auto mb-12 bg-dark-card/90 backdrop-blur-lg p-6 rounded-xl shadow-xl border border-dark-border/30 space-y-4">
