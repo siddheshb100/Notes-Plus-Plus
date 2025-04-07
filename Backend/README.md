@@ -58,12 +58,17 @@ class Note(SQLModel, table=True):
 1. Create virtual environment:
    ```bash
    python -m venv venv        # Or python3 -m venv venv
-   source venv/bin/activate   # On Windows: venv\Scripts\activate
+   source venv/bin/activate   # On Windows: .\venv\Scripts\activate
    ```
 
 2. Install dependencies:
+    ##### For Unix-Based Systems:
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt  # Or if fails use: pip install --break-system-packages -r requirements.txt
+   ```
+   ##### For Windows Based Systems:
+   ```powershell
+   pip install -r requirements-win.txt  # Or if fails use: .\venv\Scripts\python.exe -m pip install --break-system-packages -r requirements-win.txt
    ```
 
 3. Environment Setup:

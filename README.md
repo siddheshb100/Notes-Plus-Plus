@@ -66,15 +66,20 @@ For detailed setup instructions:
 
 2. Create and activate a virtual environment:
    ```bash
-   python -m venv venv  # Or python3 -m venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python -m venv venv        # Or python3 -m venv venv
+   source venv/bin/activate   # On Windows: .\venv\Scripts\activate
    ```
 
 3. Install dependencies:
+   ##### For Unix-Based Systems:
    ```bash
    pip install -r requirements.txt  # Or if fails use: pip install --break-system-packages -r requirements.txt
    ```
-
+   ##### For Windows Based Systems:
+   ```powershell
+   pip install -r requirements-win.txt  # Or if fails use: .\venv\Scripts\python.exe -m pip install --break-system-packages -r requirements-win.txt
+   ```
+   
 4. Start the backend server:
    ```bash
    uvicorn main:app --reload
